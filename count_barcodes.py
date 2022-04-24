@@ -7,32 +7,21 @@
 import sys
 import fileinput
 from collections import Counter
-#import matplotlib.pyplot as plt
 import pickle
 
 if len(sys.argv) != 2:
     raise ValueError('Single argument should be output pickle filepath')
 
-bc_counts = Counter()
+bc_counts = Counter() # dict with def. value 0
 i = 0
 for line in fileinput.input('-'):
-    i += 1
-    # try:
-    #     line = input()
-    # except EOFError:
-    #     break # no more input, on to the next step
-
     # only the second of every 4 lines has the actual sequence
+    i += 1
     if i % 4 != 2:
-        continue # only the second of every 4 lines has the actual sequence
-    barcode = line[:19]
-    bc_counts[barcode] += 1
+        continue
 
-    # if i >= 4000:
-    #     break
+    barcode = line[:19] # barcodes are the first 19 bp of the seq
+    bc_counts[barcode] += 1
 
 with open(sys.argv[1], 'wb') as f:
     pickle.dump(bc_counts, f)
-
-#plt.hist(bc_counts.values())
-#plt.show()
