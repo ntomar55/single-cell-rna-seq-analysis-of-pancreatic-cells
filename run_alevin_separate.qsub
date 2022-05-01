@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#$ -P bf528
+#$ -cwd
+#$ -pe omp 8
+#$ -j y
+#$ -o /projectnb2/bf528/users/saxophone/data_p4/qsub_output
+
+source /etc/bashrc
+
+
+salmon_dir="/projectnb2/bf528/users/saxophone/data_p4/salmon_input"
