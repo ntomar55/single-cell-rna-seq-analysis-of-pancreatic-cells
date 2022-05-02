@@ -1,0 +1,43 @@
+#!/bin/bash
+
+#$ -P bf528
+#$ -cwd
+#$ -pe omp 16
+#$ -j y
+#$ -o /projectnb2/bf528/users/saxophone/data_p4/qsub_output
+
+source /etc/bashrc
+
+# Runs alvein on all three batches, creating a single UMI matrix.
+
+module load salmon
+
+salmon_dir="/projectnb2/bf528/users/saxophone/data_p4/salmon_input"
+fastq_dir="/projectnb/bf528/project_4_scrnaseq/fastq"
+
+barcode_files=""
+read_files=""
+whitelists=""
+for sample in SRR3879604 SRR3879605 SRR3879606
+do
+    bc=${fastq_dir}/${sample}/${sample}_1_bc.fastq.gz
+    barcode_files+=" ${bc}"
+    rf=${fastq_dir}/${sample}/${sample}_2.fastq.gz
+    read_files+=" ${rf}"
+    wl=${salmon_dir}/${sample}_whitelist.txt
+    whitelists+=" ${wl}"
+done
+
+
+salmon alevin -l ISR `#recommended for Drop-Seq` \
+       -i ${salmon_dir}/trans_idx \
+       -1 $barcode_files `#barcodes` \
+       -2 $read_files `#reads` \
+       --tgMap ${salmon_dir}/t2g_map.tsv \
+       --end 5 --barcodeLength 19 --umiLength 6 `#barcoding scheme` \
+       -p 16 \
+       -o /projectnb2/bf528/users/saxophone/data_p4/alevin_output \
+       --whitelist ${salmon_dir}/whitelist.txt `#use combined whitelist`
+
+#--whitelist $whitelists `#wl for each batch` \ don't think this works
+

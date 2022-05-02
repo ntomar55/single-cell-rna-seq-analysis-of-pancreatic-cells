@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#$ -P bf528
+#$ -cwd
+#$ -pe omp 8
+#$ -j y
+#$ -o /projectnb2/bf528/users/saxophone/data_p4/qsub_output
+
+source /etc/bashrc
+
+# Creates an index to be used by alvein from the reference human transcriptome
+
+module load salmon
+
+salmon_dir="/projectnb2/bf528/users/saxophone/data_p4/salmon_input"
+
+salmon index -t ${salmon_dir}/gencode.v40.transcripts.fa.gz \
+       -k 19 `# Reads appear to be only 43 bp long, so use a shorter k` \
+       -i ${salmon_dir}/trans_idx `# Output folder` \
+       --gencode -p 8
+
