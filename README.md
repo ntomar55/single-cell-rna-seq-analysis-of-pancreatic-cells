@@ -10,7 +10,7 @@ Daniel Gealow, Nikita Tomar, and David Lenci
 
 # Repository Contents
 
-Project 4 Report.pdf: Our final report
+`Project 4 Report.pdf`: Our final report.
 
 `count_barcodes.qsub`: A shell script (to be submitted to the qsub queue)
 that runs three instances of zcat in parallel, each gradually piping the
